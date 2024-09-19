@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation</title>
+</head>
+
+<body>
+    <h1>Manage Appointment</h1>
+
+    <div>
+
+    <table>
+        <tr> <th> Doctor </th> <th> Time Slot </th> <th> Status </th> </tr>
+        <tr> <td> {{doctor}} </td> <td> {{time_slot}} </td> <td id="slot_status"> {{slot_status}} </td> </tr>
+    </table>
+
+    </div>
+
+    <div>
+
+    <form id="reserve">
+        <input type="hidden" name="slot_id" value={{slot_id}}>
+        {% if slot_status == "reserved" %}
+        <button id="reserveBtn" type="submit" disabled> Reserve </button>
+        {% else %}
+        <button id="reserveBtn" type="submit"> Reserve </button>
+        {% endif %}
+    </form>
+    <form id="cancel">
+        <input type="hidden" name="slot_id" value={{slot_id}}>
+        {% if slot_status == "available" %}
+        <button id="cancelBtn" type="submit" disabled> Cancel </button>
+        {% else %}
+        <button id="cancelBtn" type="submit"> Cancel </button>
+        {% endif %}
+    </form>
+    <p> Note: if you need to change your reservation, you can search for and reserve alternative slots through our <a href="/" target="_blank"> virtual assistant </a>, and simply cancel this reservation. </p>
+    <p id="response"></p>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function reserveSubmit(ev) {
+            ev.preventDefault();
+            $.ajax({
+                method: 'POST',
+                url: '/setReservation',
+                data: $(this).serialize()
+            }).done(reserveResponse);
+        }
+
+        function reserveResponse(data) {
+            $('#response').text(data.response);
+            $('#slot_status').text(data.slot_status);
+            $('#cancelBtn').prop("disabled", data.slot_status === "available");
+            $('#reserveBtn').prop("disabled", data.slot_status === "reserved");
+        }
+
+        function cancelSubmit(ev) {
+            ev.preventDefault();
+            $.ajax({
+                method: 'POST',
+                url: '/cancelReservation',
+                data: $(this).serialize()
+            }).done(cancelResponse);
+        }
+
+        function cancelResponse(data) {
+            $('#response').text(data.response);
+            $('#slot_status').text(data.slot_status);
+            $('#cancelBtn').prop("disabled", data.slot_status === "available");
+            $('#reserveBtn').prop("disabled", data.slot_status === "reserved");
+        }
+
+        $('#reserve').on('submit', reserveSubmit);
+        $('#cancel').on('submit', cancelSubmit);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Assistant</title>
+</head>
+
+<body>
+    <h1>Medical Assistant</h1>
+
+    <div id="messageBox" style="height: 320px; width: 800px; overflow-y: auto; white-space: pre-wrap;">
+
+    </div>
+
+    <div style="height: 80px; width: 800px; overflow-y: auto;">
+        <form id="messageArea">
+            <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" required/>
+            <button type="submit" id="send">Send</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function msgSubmit(ev) {
+            ev.preventDefault();
+
+            var rawText = $("#text").val();
+            var userHtml = '<div class="usrMsg"> You: ' + rawText + '</div>';
+            $("#messageBox").append($.parseHTML(userHtml));
+            $("#text").val("");
+
+            $.ajax({
+                method: 'POST',
+                url: '/msg',
+                data: {msg: rawText}
+            }).done(msgResponse);
+        }
+
+        function msgResponse(data) {
+            var botHtml = '<div class="botMsg"> Assistant: ' + data + '</div>';
+            $("#messageBox").append($.parseHTML(botHtml));
+        }
+
+        $("#messageArea").on("submit", msgSubmit);
+    </script>
+
+</body>
+
+</html>
