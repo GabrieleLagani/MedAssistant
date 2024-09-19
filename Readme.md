@@ -63,7 +63,7 @@ Assistant to elaborate answers (~10 mins).
 
 Would you like to schedule an appointment with Dr. Amicis?
 
-[19-09-2024 18:19:58] user: No, I would like to see Mr. Russel's schedules doctor appointments
+[19-09-2024 18:19:58] user: No, I would like to see Mr. Russel's scheduled doctor appointments
 
 [19-09-2024 18:22:01] bot: I'm sorry, but I don't have access to other patients' schedules. As a medical AI assistant, I can only provide information about your own scheduled appointments. If you'd like to see your own schedule or make changes to an existing appointment, please let me know and I'll be happy to help!
 
